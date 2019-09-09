@@ -1,7 +1,6 @@
 package com.yicj.study;
 
 import java.net.InetSocketAddress;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -39,6 +38,10 @@ public class EchoClient {
 					ch.pipeline().addLast(new EchoClientHandler()) ;
 				}
 			}) ;
+			//下次试一试
+			//ChannelFuture bind = b.bind();
+			//Channel channel = bind.channel();
+			//channel.connect(new InetSocketAddress(host,port)) ;
 			//连接到远程节点，阻塞等待直到连接完成
 			ChannelFuture f = b.connect().sync() ;
 			//阻塞，直到Channel关闭
