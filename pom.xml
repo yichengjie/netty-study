@@ -53,5 +53,7 @@
 	<modules>
 		<module>echo-server</module>
 		<module>echo-client</module>
+		<module>echo-server2</module>
+		<module>echo-client2</module>
 	</modules>
 </project>
