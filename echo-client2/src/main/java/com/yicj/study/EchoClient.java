@@ -15,7 +15,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class EchoClient {
-	
 	private final String host ;
 	private final int port ;
 	
@@ -23,9 +22,8 @@ public class EchoClient {
 		this.host = host ;
 		this.port = port ;
 	}
-	
+
 	public void start() throws Exception {
-		
 		EventLoopGroup group = new NioEventLoopGroup() ;
 		try {
 			//创建bootstrap
@@ -46,7 +44,7 @@ public class EchoClient {
 					p.addLast(new MessageDecoder()) ; //inBound
 					//2.待MessageDecoder解码后才能使用EchoClientHandler直接读取数据
 					p.addLast(new EchoClientHandler()) ;//inBound
-					
+					p.addLast(new EchoClientHandler2()) ;//inBound
 				}
 			}) ;
 			//连接到远程节点，阻塞等待直到连接完成

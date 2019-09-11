@@ -38,6 +38,7 @@ public class EchoServer {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ch.pipeline().addLast(serverHandler) ;
+					ch.pipeline().addLast(new EchoServerHandler2()) ;
 				}
 			}) ;
 			//异步的绑定服务器，调用sync阻塞等待，直到绑定完成

@@ -10,38 +10,20 @@ import io.netty.channel.ChannelHandler.Sharable;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Sharable//标记该类的实例可以被多个Channel共享
-public class EchoClientHandler extends ChannelInboundHandlerAdapter {
-	
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		log.info("channel active"); 
-		String content = "EchoClientHandler hello world ,this is netty client !" ;
-		byte tag = 0 ;
-		byte encode = 1 ;
-		byte encrypt = 1;
-		byte extend1 = 1 ;
-		byte extend2 = 0 ;
-		String sessionid = "713f17ca614361fb257dc6741332caf2" ;
-		int length = content.getBytes("UTF-8").length ;
-		int cammand = 1 ;
-		Header header = new Header(tag, encode, encrypt, extend1, extend2, sessionid, length, cammand) ;
-		Message message = new Message(header, content) ;
-		ctx.writeAndFlush(message) ;
-	}
+public class EchoClientHandler2 extends ChannelInboundHandlerAdapter {
 	
 	//接收到数据后调用
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Message msg1 = (Message) msg ;
-		log.info("EchoClientHandler client receive message from server : " + msg1.toString());
-		ctx.fireChannelRead(msg) ;
+		log.info("EchoClientHandler2 receive message from server : " + msg1.toString());
 	}
 	
 	
 	//完成时调用
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		System.out.println("channelReadComplete");
+		System.out.println("EchoClientHandler2.channelReadComplete");
 	}
 	
 	
