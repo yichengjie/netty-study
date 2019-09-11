@@ -1,9 +1,14 @@
 package com.yicj.study;
 
 import java.net.InetSocketAddress;
+
+import com.yicj.study.decoder.MessageDecoder;
+import com.yicj.study.encoder.MessageEncoder;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -35,13 +40,12 @@ public class EchoClient {
 			.handler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(new EchoClientHandler()) ;
+					ChannelPipeline p = ch.pipeline();
+					p.addLast(new MessageDecoder()) ;
+					p.addLast(new MessageEncoder()) ;//出站处理器
+					p.addLast(new EchoClientHandler()) ;//
 				}
 			}) ;
-			//下次试一试
-			//ChannelFuture bind = b.bind();
-			//Channel channel = bind.channel();
-			//channel.connect(new InetSocketAddress(host,port)) ;
 			//连接到远程节点，阻塞等待直到连接完成
 			ChannelFuture f = b.connect().sync() ;
 			//阻塞，直到Channel关闭

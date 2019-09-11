@@ -1,11 +1,9 @@
 package com.yicj.study;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
+import com.yicj.study.vo.Header;
+import com.yicj.study.vo.Message;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import io.netty.channel.ChannelHandler.Sharable ;
 
@@ -15,17 +13,26 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		ByteBuf in = (ByteBuf) msg ;
-		log.info("Server received: " + in.toString(CharsetUtil.UTF_8));
-		//将接收到的消息写给发送者，而不冲刷出站消息
-		ctx.write(in) ;
+		Message msg1 = (Message) msg ;
+		log.info("server receive client msg : " + msg1.toString());
+		//此处写接受到客户端请求后的业务逻辑
+		String content = "Hello world ,this is netty server!" ;
+		byte tag = 0 ;
+		byte encode = 1 ;
+		byte encrypt = 1 ;
+		byte extend1 = 1 ;
+		byte extend2 = 0 ;
+		String sessionid = "713f17ca614361fb257dc6741332caf2" ;
+		int length = content.getBytes("UTF-8").length ;
+		int cammand = 1 ;
+		Header header = new Header(tag, encode, encrypt, extend1, extend2, sessionid, length, cammand) ;
+		Message message = new Message(header, content) ;
+		ctx.writeAndFlush(message) ;
 	}
 	
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		//将未决消息冲刷到远程节点，并且关闭该channel
-		ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-		.addListener(ChannelFutureListener.CLOSE) ;
+		log.info("EchoServerHandler.channelReadComplete()...");
 	}
 	
 	@Override

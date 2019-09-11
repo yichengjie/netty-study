@@ -1,28 +1,50 @@
 package com.yicj.study;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+
+import com.yicj.study.vo.Header;
+import com.yicj.study.vo.Message;
+
 import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Sharable//标记该类的实例可以被多个Channel共享
-public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		//当被通知Channel是活跃的时候，发送一条信息
-		ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!",CharsetUtil.UTF_8)) ;
+		log.info("channel active"); 
+		String content = "hello world ,this is netty client !" ;
+		byte tag = 0 ;
+		byte encode = 1 ;
+		byte encrypt = 1;
+		byte extend1 = 1 ;
+		byte extend2 = 0 ;
+		String sessionid = "713f17ca614361fb257dc6741332caf2" ;
+		int length = content.getBytes("UTF-8").length ;
+		int cammand = 1 ;
+		Header header = new Header(tag, encode, encrypt, extend1, extend2, sessionid, length, cammand) ;
+		Message message = new Message(header, content) ;
+		ctx.writeAndFlush(message) ;
 	}
-	//每当接收数据时都会调用这个方法。需要注意的是，由服务器发送的消息可能会被分块接收。也就是说服务器发送了5字节，那么不能保证
-	//这5个字节会被一次接收。即使是对于这么少的数据，channelRead0()方法也可能会被调用两次，第一次使用一个持有3字节的ByteBuf
-	//第二次使用一个持有2字节的ByteBuf。
+	
+	//接收到数据后调用
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-		//记录已接收消息的转储
-		log.info("Client received : " + in.toString(CharsetUtil.UTF_8));
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		Message msg1 = (Message) msg ;
+		log.info("client receive message from server : " + msg1.toString());
+		ctx.fireChannelRead(msg) ;
 	}
+	
+	
+	//完成时调用
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		System.out.println("channelReadComplete");
+	}
+	
+	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		//发生异常时，记录错误并关闭Channel

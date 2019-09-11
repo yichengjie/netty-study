@@ -55,5 +55,6 @@
 		<module>echo-client</module>
 		<module>echo-server2</module>
 		<module>echo-client2</module>
+		<module>echo-common</module>
 	</modules>
 </project>

@@ -8,4 +8,12 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>echo-server2</artifactId>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.yicj.study</groupId>
+			<artifactId>echo-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

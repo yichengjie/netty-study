@@ -1,9 +1,14 @@
 package com.yicj.study;
 
 import java.net.InetSocketAddress;
+
+import com.yicj.study.decoder.MessageDecoder;
+import com.yicj.study.encoder.MessageEncoder;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -37,7 +42,10 @@ public class EchoServer {
 			.childHandler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(serverHandler) ;
+					ChannelPipeline p = ch.pipeline();
+					p.addLast(new MessageDecoder()) ;
+					p.addLast(new MessageEncoder()) ;
+					p.addLast(serverHandler) ;
 				}
 			}) ;
 			//异步的绑定服务器，调用sync阻塞等待，直到绑定完成
