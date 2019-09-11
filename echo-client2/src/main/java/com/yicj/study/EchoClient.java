@@ -41,9 +41,12 @@ public class EchoClient {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast(new MessageDecoder()) ;
-					p.addLast(new MessageEncoder()) ;//出站处理器
-					p.addLast(new EchoClientHandler()) ;//
+					p.addLast(new MessageEncoder()) ;//outBound
+					//1.这里需要先使用MessageDecoder解码
+					p.addLast(new MessageDecoder()) ; //inBound
+					//2.待MessageDecoder解码后才能使用EchoClientHandler直接读取数据
+					p.addLast(new EchoClientHandler()) ;//inBound
+					
 				}
 			}) ;
 			//连接到远程节点，阻塞等待直到连接完成

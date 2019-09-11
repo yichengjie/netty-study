@@ -9,7 +9,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MessageDecoder extends ByteToMessageDecoder {
 	/**包长度志头**/
 	public static final int HEAD_LENGHT = 45;
@@ -19,6 +21,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
 	//从ByteBuf中获取字节，转换成对象，写入到List中
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
+		log.info("MessageDecoder decode method is exec ....");
 		if (buffer.readableBytes() < HEAD_LENGHT) {
 			throw new CorruptedFrameException("包长度问题");
 		}

@@ -34,7 +34,6 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Message msg1 = (Message) msg ;
 		log.info("client receive message from server : " + msg1.toString());
-		ctx.fireChannelRead(msg) ;
 	}
 	
 	
