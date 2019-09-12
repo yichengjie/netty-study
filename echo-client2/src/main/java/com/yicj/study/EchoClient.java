@@ -44,6 +44,7 @@ public class EchoClient {
 					p.addLast(new MessageDecoder()) ; //inBound
 					//2.待MessageDecoder解码后才能使用EchoClientHandler直接读取数据
 					p.addLast(new EchoClientHandler()) ;//inBound
+					p.addLast(new EchoClientHandler3()) ;
 					p.addLast(new EchoClientHandler2()) ;//inBound
 				}
 			}) ;

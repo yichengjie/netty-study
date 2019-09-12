@@ -34,6 +34,7 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Message msg1 = (Message) msg ;
 		log.info("EchoClientHandler client receive message from server : " + msg1.toString());
+		//如果重新channelRead方法则必须要手动调用fireChannelRead，将数据传递给下一个channelHandler
 		ctx.fireChannelRead(msg) ;
 	}
 	

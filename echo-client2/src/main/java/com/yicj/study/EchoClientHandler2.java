@@ -3,6 +3,8 @@ package com.yicj.study;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.util.List;
+
 import com.yicj.study.vo.Header;
 import com.yicj.study.vo.Message;
 
