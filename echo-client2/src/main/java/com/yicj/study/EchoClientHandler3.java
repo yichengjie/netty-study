@@ -14,7 +14,7 @@ public class EchoClientHandler3 extends MessageToMessageDecoder<Message>{
 	@Override
 	protected void decode(ChannelHandlerContext ctx, Message msg, List<Object> out) throws Exception {
 		log.info("EchoClientHandler3 decode ... " + msg.toString());
-		out.add(msg) ;
+		out.add(msg.toString()) ;
 	}
 
 }
