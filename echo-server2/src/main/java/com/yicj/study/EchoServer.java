@@ -43,6 +43,10 @@ public class EchoServer {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
+					//注意
+					//注意
+					//注意
+					//☆☆☆实验结果发现，必须得把outBound放在inBound的前面，否则结果不对☆☆☆
 					p.addLast(new MessageEncoder()) ; // outBound
 					p.addLast(new MessageDecoder()) ;//inBound
 					p.addLast(serverHandler) ;//inBound

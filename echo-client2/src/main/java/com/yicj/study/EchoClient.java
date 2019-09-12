@@ -39,6 +39,10 @@ public class EchoClient {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
+					//注意
+					//注意
+					//注意
+					//☆☆☆实验结果发现，必须得把outBound放在inBound的前面，否则结果不对☆☆☆
 					p.addLast(new MessageEncoder()) ;//outBound
 					//1.这里需要先使用MessageDecoder解码
 					p.addLast(new MessageDecoder()) ; //inBound
@@ -46,6 +50,7 @@ public class EchoClient {
 					p.addLast(new EchoClientHandler()) ;//inBound
 					p.addLast(new EchoClientHandler3()) ;
 					p.addLast(new EchoClientHandler2()) ;//inBound
+					
 				}
 			}) ;
 			//连接到远程节点，阻塞等待直到连接完成
