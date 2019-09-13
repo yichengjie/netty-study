@@ -1,4 +1,4 @@
-package com.yicj.study;
+package com.yicj.study.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

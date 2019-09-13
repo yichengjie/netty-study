@@ -3,6 +3,10 @@ package com.yicj.study;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+import com.yicj.study.handler.ClientChannelActiveHandler;
+import com.yicj.study.handler.ClientChannelReadHandler;
+import com.yicj.study.handler.HeartbeatHandler;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -38,8 +42,9 @@ public class EchoClient {
 			.handler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(new EchoClientHandler()) ;
-					ch.pipeline().addLast(new IdleStateHandler(0, 0, 60,TimeUnit.SECONDS)) ;
+					ch.pipeline().addLast(new ClientChannelActiveHandler()) ;
+					ch.pipeline().addLast(new ClientChannelReadHandler()) ;
+					ch.pipeline().addLast(new IdleStateHandler(0, 0, 5,TimeUnit.SECONDS)) ;
 					ch.pipeline().addLast(new HeartbeatHandler()) ;
 				}
 			}) ;
