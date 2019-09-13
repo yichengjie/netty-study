@@ -1,6 +1,8 @@
 package com.yicj.study;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -8,6 +10,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class EchoClient {
 	
@@ -36,6 +39,8 @@ public class EchoClient {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ch.pipeline().addLast(new EchoClientHandler()) ;
+					ch.pipeline().addLast(new IdleStateHandler(0, 0, 60,TimeUnit.SECONDS)) ;
+					ch.pipeline().addLast(new HeartbeatHandler()) ;
 				}
 			}) ;
 			//下次试一试

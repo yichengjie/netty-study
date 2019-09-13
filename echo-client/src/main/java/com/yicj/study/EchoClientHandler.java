@@ -14,6 +14,9 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//当被通知Channel是活跃的时候，发送一条信息
 		ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!",CharsetUtil.UTF_8)) ;
+		//注意这里需要手动执行，super.channelActive(ctx);
+		//否则，IdleStateHandler无法监听到channelActive事件,将无法正常运行
+		super.channelActive(ctx);
 	}
 	//每当接收数据时都会调用这个方法。需要注意的是，由服务器发送的消息可能会被分块接收。也就是说服务器发送了5字节，那么不能保证
 	//这5个字节会被一次接收。即使是对于这么少的数据，channelRead0()方法也可能会被调用两次，第一次使用一个持有3字节的ByteBuf
