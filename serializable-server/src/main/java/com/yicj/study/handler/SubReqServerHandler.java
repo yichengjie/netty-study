@@ -1,4 +1,4 @@
-package com.yicj.study.channel;
+package com.yicj.study.handler;
 
 import com.yicj.study.vo.SubscribeReq;
 import com.yicj.study.vo.SubscribeResp;

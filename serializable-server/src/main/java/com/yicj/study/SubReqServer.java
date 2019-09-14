@@ -1,7 +1,7 @@
 package com.yicj.study;
 
-import com.yicj.study.channel.SubReqServerHandler;
 import com.yicj.study.common.MarshallingCodeCFactory;
+import com.yicj.study.handler.SubReqServerHandler;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
