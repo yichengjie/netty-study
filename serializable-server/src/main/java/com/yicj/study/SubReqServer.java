@@ -30,10 +30,10 @@ public class SubReqServer {
 			.childHandler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
-					//通过工厂类创建MarshallingEncoder解码器，并添加到ChannelPipeline中
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 					//通过工厂类创建MarshallingEncoder编码器，并添加到ChannelPipeline中
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					//通过工厂类创建MarshallingEncoder解码器，并添加到ChannelPipeline中
+					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 					ch.pipeline().addLast(new SubReqServerHandler()) ;
 				}
 			}) ;

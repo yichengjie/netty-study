@@ -25,8 +25,8 @@ public class SubReqClient {
 			.handler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
 					ch.pipeline().addLast(new SubReqClientHandler()) ;
 				}
 				
