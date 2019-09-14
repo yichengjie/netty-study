@@ -12,7 +12,7 @@ public class SubReqServerHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		log.info("SubReqServerHandler  channelRead method is call ...");
+		//log.info("SubReqServerHandler  channelRead method is call ...");
 		//经过解码器handler ObjectDecoder的解码
 		//SubReqServerHandler接收到的请求消息已经被自动解码为SubscribeReq对象，可以直接使用
 		SubscribeReq req = (SubscribeReq) msg ;
