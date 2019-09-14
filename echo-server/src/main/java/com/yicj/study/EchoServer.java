@@ -22,7 +22,7 @@ public class EchoServer {
 	
 	
 	public void start() throws InterruptedException {
-		final EchoServerHandler serverHandler = new EchoServerHandler() ;
+		//final EchoServerHandler serverHandler = new EchoServerHandler() ;
 		//创建EventLoopGroup
 		EventLoopGroup group = new NioEventLoopGroup() ;
 		try {
@@ -37,7 +37,7 @@ public class EchoServer {
 			.childHandler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(serverHandler) ;
+					ch.pipeline().addLast(new EchoServerHandler()) ;
 				}
 			}) ;
 			//异步的绑定服务器，调用sync阻塞等待，直到绑定完成
