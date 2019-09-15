@@ -7,11 +7,11 @@
 		<artifactId>netty-study</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>serializable-server</artifactId>
+	<artifactId>seria-json-server</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>com.yicj.study</groupId>
-			<artifactId>serializable-common</artifactId>
+			<artifactId>seria-json-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

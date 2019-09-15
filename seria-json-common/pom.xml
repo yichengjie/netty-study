@@ -5,5 +5,5 @@
     <artifactId>netty-study</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>serializable-common</artifactId>
+  <artifactId>seria-json-common</artifactId>
 </project>
