@@ -8,9 +8,11 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class SubReqClient {
 
@@ -25,9 +27,11 @@ public class SubReqClient {
 			.handler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
-					ch.pipeline().addLast(new SubReqClientHandler()) ;
+					ChannelPipeline p = ch.pipeline();
+					p.addLast(new IdleStateHandler(0,0,10)) ;
+					p.addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					p.addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
+					p.addLast(new SubReqClientHandler()) ;
 				}
 				
 			}); 

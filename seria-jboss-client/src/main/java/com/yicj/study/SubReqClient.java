@@ -11,6 +11,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class SubReqClient {
 
@@ -25,6 +26,7 @@ public class SubReqClient {
 			.handler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
+					ch.pipeline().addLast(new IdleStateHandler(0,0,20)) ;
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
 					ch.pipeline().addLast(new SubReqClientHandler()) ;

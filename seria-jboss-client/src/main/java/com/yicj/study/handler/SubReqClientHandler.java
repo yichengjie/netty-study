@@ -4,6 +4,7 @@ import com.yicj.study.vo.SubscribeReq;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -44,6 +45,18 @@ public class SubReqClientHandler extends ChannelInboundHandlerAdapter{
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		log.error("出错:" ,cause);
 		ctx.close() ;
+	}
+	
+	@Override
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		if(evt instanceof IdleStateEvent) {
+			log.info("准备发送心跳数据.....");
+			SubscribeReq subReq = subReq(-1000);
+			ctx.channel().writeAndFlush(subReq) ;
+		}else {
+			super.userEventTriggered(ctx, evt);
+		}
+		
 	}
 	
 }
