@@ -27,8 +27,11 @@ public class SubReqClient {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
 					ch.pipeline().addLast(new IdleStateHandler(0,0,20)) ;
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
+					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					//注意这里的buildMarshallingEncoder必须在SubReqClientHandler前面，
+					//否则SubReqClientHandler.channelActive,写的数据无法到达服务端,
+					//总结：尽量的将encode放在encoder [outBound]写在encoder前面
 					ch.pipeline().addLast(new SubReqClientHandler()) ;
 				}
 				

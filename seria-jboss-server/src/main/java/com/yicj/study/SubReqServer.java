@@ -30,10 +30,13 @@ public class SubReqServer {
 			.childHandler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
-					//通过工厂类创建MarshallingEncoder编码器，并添加到ChannelPipeline中
-					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
 					//通过工厂类创建MarshallingEncoder解码器，并添加到ChannelPipeline中
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
+					//通过工厂类创建MarshallingEncoder编码器，并添加到ChannelPipeline中
+					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					//注意这里的buildMarshallingEncoder必须在SubReqClientHandler前面，
+					//否则SubReqClientHandler.channelActive,写的数据无法到达服务端,
+					//总结：尽量的将encode放在encoder [outBound]写在encoder前面
 					ch.pipeline().addLast(new SubReqServerHandler()) ;
 				}
 			}) ;
