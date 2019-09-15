@@ -1,11 +1,7 @@
 package com.yicj.study;
 
-import com.yicj.study.codec.JSONDecoder;
-import com.yicj.study.codec.JSONEncoder;
 import com.yicj.study.codec.MarshallingCodeCFactory;
-import com.yicj.study.handler.SubReqClientHandler;
-import com.yicj.study.vo.SubscribeResp;
-
+import com.yicj.study.handler.SubReqClientHandler2;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -27,16 +23,17 @@ public class SubReqClient {
 			boot.group(group)
 			.channel(NioSocketChannel.class)
 			.option(ChannelOption.TCP_NODELAY, true)
+			.option(ChannelOption.SO_KEEPALIVE, true)
 			.handler(new ChannelInitializer<Channel>() {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast(new IdleStateHandler(0,0,10)) ;
+					p.addLast(new IdleStateHandler(0,0,5)) ;
 					//p.addLast(new JSONEncoder()) ;
 					//p.addLast(new JSONDecoder(SubscribeResp.class)) ;
 					p.addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
 					p.addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
-					p.addLast(new SubReqClientHandler()) ;
+					p.addLast("handler", new SubReqClientHandler2()) ;
 				}
 				
 			}); 
