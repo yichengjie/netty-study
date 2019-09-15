@@ -2,7 +2,10 @@ package com.yicj.study;
 
 import com.yicj.study.codec.JSONDecoder;
 import com.yicj.study.codec.JSONEncoder;
+import com.yicj.study.codec.MarshallingCodeCFactory;
 import com.yicj.study.handler.SubReqServerHandler;
+import com.yicj.study.vo.SubscribeReq;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -32,8 +35,10 @@ public class SubReqServer {
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast(new JSONEncoder()) ;
-					p.addLast(new JSONDecoder()) ;
+					//p.addLast(new JSONEncoder()) ;
+					//p.addLast(new JSONDecoder(SubscribeReq.class)) ;
+					p.addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
+					p.addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
 					p.addLast(new SubReqServerHandler()) ;
 				}
 			}) ;

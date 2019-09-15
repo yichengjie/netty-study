@@ -57,6 +57,4 @@ public class SubReqClientHandler extends ChannelInboundHandlerAdapter{
 		ctx.close() ;
 	}
 	
-
-	
 }
