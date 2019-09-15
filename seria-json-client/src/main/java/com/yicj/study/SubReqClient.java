@@ -1,8 +1,8 @@
 package com.yicj.study;
 
-import com.yicj.study.common.MarshallingCodeCFactory;
+import com.yicj.study.codec.JSONDecoder;
+import com.yicj.study.codec.JSONEncoder;
 import com.yicj.study.handler.SubReqClientHandler;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -29,8 +29,8 @@ public class SubReqClient {
 				protected void initChannel(Channel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast(new IdleStateHandler(0,0,10)) ;
-					p.addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
-					p.addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
+					p.addLast(new JSONEncoder()) ;
+					p.addLast(new JSONDecoder()) ;
 					p.addLast(new SubReqClientHandler()) ;
 				}
 				
