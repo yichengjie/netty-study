@@ -22,9 +22,9 @@
 		<module>seria-jboss-common</module>
 		<module>seria-jboss-client</module>
 		<module>seria-jboss-server</module>
-		<module>seria-json-common</module>
-		<module>seria-json-client</module>
-		<module>seria-json-server</module>
+		<module>seria-protobuf-common</module>
+		<module>seria-protobuf-client</module>
+		<module>seria-protobuf-server</module>
 	</modules>
 	<dependencies>
 		<dependency>

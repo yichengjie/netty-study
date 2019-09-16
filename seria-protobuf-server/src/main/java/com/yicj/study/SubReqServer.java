@@ -1,6 +1,6 @@
 package com.yicj.study;
 
-import com.yicj.study.codec.MarshallingCodeCFactory;
+import com.google.protobuf.MessageLite;
 import com.yicj.study.handler.SubReqServerHandler2;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -11,6 +11,9 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 //https://www.cnblogs.com/wade-luffy/p/6169947.html
@@ -20,6 +23,7 @@ public class SubReqServer {
 	public void bind(int port) throws InterruptedException {
 		//配置服务端的Nio线程组
 		EventLoopGroup group = new NioEventLoopGroup() ;
+		MessageLite lite = null;
 		try {
 			ServerBootstrap boot = new ServerBootstrap() ;
 			boot.group(group)
@@ -33,10 +37,9 @@ public class SubReqServer {
 				protected void initChannel(Channel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast(new IdleStateHandler(0, 0, 20));
-					//p.addLast(new JSONEncoder()) ;
-					//p.addLast(new JSONDecoder(SubscribeReq.class)) ;
-					p.addLast(MarshallingCodeCFactory.buildMarshallingEncoder()) ;
-					p.addLast(MarshallingCodeCFactory.buildMarshallingDecoder()) ;
+					p.addLast(new ProtobufVarint32FrameDecoder()) ;
+					p.addLast(new ProtobufEncoder()) ;
+					p.addLast(new ProtobufDecoder(lite)) ;
 					p.addLast(new SubReqServerHandler2()) ;
 				}
 			}) ;

@@ -7,11 +7,12 @@
 		<artifactId>netty-study</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>seria-json-server</artifactId>
+	<artifactId>seria-protobuf-client</artifactId>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.yicj.study</groupId>
-			<artifactId>seria-json-common</artifactId>
+			<artifactId>seria-protobuf-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
