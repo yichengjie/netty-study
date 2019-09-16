@@ -1,7 +1,7 @@
 package com.yicj.study.handler;
 
-import com.yicj.study.vo.SubscribeReq;
-import com.yicj.study.vo.SubscribeResp;
+import com.yicj.study.proto.SubscribeReqProto;
+import com.yicj.study.proto.SubscribeRespProto;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -9,27 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SubReqServerHandler extends ChannelInboundHandlerAdapter {
-	
-	@Override
+	@Override 
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		//log.info("SubReqServerHandler  channelRead method is call ...");
 		//经过解码器handler ObjectDecoder的解码
 		//SubReqServerHandler接收到的请求消息已经被自动解码为SubscribeReq对象，可以直接使用
-		SubscribeReq req = (SubscribeReq) msg ;
-		//if("yicj".equalsIgnoreCase(req.getUserName())) {
-		log.info("Service accept client subscribe req:["+req.toString()+"]");
-		//对订购者的用户名进行合法性验证，校验通过后打印订购请求信息，
-		//构造订购成功应答消息立即发送给客户端
-		ctx.writeAndFlush(resp(req.getSubReqID())) ;
-		//}
-	}
-	
-	private SubscribeResp resp(int subReqID) {
-		SubscribeResp resp = new SubscribeResp() ;
-		resp.setSubReqID(subReqID); 
-		resp.setRespCode(0);
-		resp.setDesc("Netty book order succeed, 3 days later, sent to the designated address");
-		return resp ;
+		SubscribeReqProto.SubscribeReq req = (SubscribeReqProto.SubscribeReq)msg ;
+		log.info("服务器接收客户端消息是 : " + req.toString());
+		ctx.writeAndFlush(resp(req.getSubReqId())) ;
 	}
 	
 	@Override
@@ -37,4 +24,14 @@ public class SubReqServerHandler extends ChannelInboundHandlerAdapter {
 		log.error("出错 : " ,cause);
 		ctx.close() ;
 	}
+	
+	private SubscribeRespProto.SubscribeResp resp (int subReqId){
+		SubscribeRespProto.SubscribeResp.Builder builder = 
+				SubscribeRespProto.SubscribeResp.newBuilder() ;
+		builder.setSubReqId(subReqId) ;
+		builder.setRespCode(200) ;
+		builder.setDesc("网上预订成功3天后，发送到指定的地址") ;
+		return builder.build() ;
+	}
+	
 }

@@ -1,7 +1,7 @@
 package com.yicj.study;
 
-import com.google.protobuf.MessageLite;
-import com.yicj.study.handler.SubReqServerHandler2;
+import com.yicj.study.handler.SubReqServerHandler;
+import com.yicj.study.proto.SubscribeReqProto;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 
 //https://www.cnblogs.com/wade-luffy/p/6169947.html
@@ -23,7 +24,6 @@ public class SubReqServer {
 	public void bind(int port) throws InterruptedException {
 		//配置服务端的Nio线程组
 		EventLoopGroup group = new NioEventLoopGroup() ;
-		MessageLite lite = null;
 		try {
 			ServerBootstrap boot = new ServerBootstrap() ;
 			boot.group(group)
@@ -38,9 +38,10 @@ public class SubReqServer {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast(new IdleStateHandler(0, 0, 20));
 					p.addLast(new ProtobufVarint32FrameDecoder()) ;
+					p.addLast(new ProtobufDecoder(SubscribeReqProto.SubscribeReq.getDefaultInstance())) ;
+					p.addLast(new ProtobufVarint32LengthFieldPrepender());
 					p.addLast(new ProtobufEncoder()) ;
-					p.addLast(new ProtobufDecoder(lite)) ;
-					p.addLast(new SubReqServerHandler2()) ;
+					p.addLast(new SubReqServerHandler()) ;
 				}
 			}) ;
 			//绑定端口，同步等待成功

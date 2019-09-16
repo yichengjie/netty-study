@@ -1,5 +1,8 @@
 package com.yicj.study.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yicj.study.proto.SubscribeReqProto;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -10,26 +13,34 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SubReqClientHandler extends ChannelInboundHandlerAdapter{
 
-/*	@Override
+	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//在链路激活的时候循环构造10条订购消息，最后一次性地发送给服务器端
-		//for(int i = 0 ; i < 10 ; i++) {
-		ctx.write(subReq(0)) ;
-		//}
+		for(int i = 0 ; i < 10 ; i++) {
+			ctx.write(subReq(i)) ;
+		}
 		ctx.flush();
-	}*/
+	}
 	
 	
+	private Object subReq(int reqId) {
+		SubscribeReqProto.SubscribeReq.Builder builder = 
+				SubscribeReqProto.SubscribeReq.newBuilder() ;
+		builder.setProductName("Netty Boot") ;
+		builder.setUserName("yicj") ;
+		builder.setSubReqId(reqId) ;
+		List<String> address = new ArrayList<>() ;
+		address.add("aaaaaaaaaaaaaaaaaaa") ;
+		address.add("bbbbbbbbbbbbbbbbbbb") ;
+		address.add("ccccccccccccccccccc") ;
+		builder.addAllAddress(address) ;
+		return builder.build();
+	}
+
+
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		//由于对象解码器已经对订购请求应答消息进行了自动解码
-		//因此，SubReqClientHandler接收到的消息已经是解码成功后的订购应答消息
-		//SubscribeReqProto.SubscribeReq = 
-		
-		log.info("Receive server response :["+msg.toString()+"]");
-		
-		
-		
+		log.info("接收服务器端消息是 :["+msg.toString()+"]");
 	}
 	
 	@Override
@@ -40,7 +51,7 @@ public class SubReqClientHandler extends ChannelInboundHandlerAdapter{
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 		if(evt instanceof IdleStateEvent) {
-			//ctx.channel().writeAndFlush(subReq(-1000)) ;
+			ctx.channel().writeAndFlush(subReq(-1000)) ;
 		}else {
 			super.userEventTriggered(ctx, evt);
 		}

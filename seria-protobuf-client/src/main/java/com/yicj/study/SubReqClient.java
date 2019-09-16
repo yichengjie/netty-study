@@ -1,7 +1,7 @@
 package com.yicj.study;
 
-import com.google.protobuf.MessageLite;
-import com.yicj.study.handler.SubReqClientHandler2;
+import com.yicj.study.handler.SubReqClientHandler;
+import com.yicj.study.proto.SubscribeRespProto;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -14,18 +14,16 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 
 public class SubReqClient {
 	
-	
-
 	public void connect(String host,int port) throws InterruptedException {
 		
 		EventLoopGroup group = new NioEventLoopGroup() ;
 		try {
 			Bootstrap boot = new Bootstrap() ;
-			MessageLite lite = null;
 			boot.group(group)
 			.channel(NioSocketChannel.class)
 			.option(ChannelOption.TCP_NODELAY, true)
@@ -35,12 +33,11 @@ public class SubReqClient {
 				protected void initChannel(Channel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast(new IdleStateHandler(0,0,5)) ;
-					//p.addLast(new JSONEncoder()) ;
-					//p.addLast(new JSONDecoder(SubscribeResp.class)) ;
 					p.addLast(new ProtobufVarint32FrameDecoder()) ;
+					p.addLast(new ProtobufDecoder(SubscribeRespProto.SubscribeResp.getDefaultInstance())) ;
+					p.addLast(new ProtobufVarint32LengthFieldPrepender()) ;
 					p.addLast(new ProtobufEncoder()) ;
-					p.addLast(new ProtobufDecoder(lite)) ;
-					p.addLast("handler", new SubReqClientHandler2()) ;
+					p.addLast("handler", new SubReqClientHandler()) ;
 				}
 				
 			}); 
