@@ -25,7 +25,7 @@
 		<module>seria-protobuf-common</module>
 		<module>seria-protobuf-client</module>
 		<module>seria-protobuf-server</module>
-		<module>simple-http-practice</module>
+		<module>netty-api-practice</module>
 	</modules>
 	<dependencies>
 		<dependency>
