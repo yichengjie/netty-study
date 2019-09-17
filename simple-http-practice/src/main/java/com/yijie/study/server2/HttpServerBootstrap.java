@@ -10,6 +10,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
@@ -33,6 +34,9 @@ public class HttpServerBootstrap {
 				ChannelPipeline p = ch.pipeline();
 				p.addLast(new HttpResponseEncoder()) ;
 				p.addLast(new HttpRequestDecoder()) ;
+				//http压缩
+				p.addLast(new HttpContentCompressor()) ;
+				//聚合http消息
 				p.addLast(new HttpObjectAggregator(512* 1024)) ;
 				p.addLast(new HttpServerHandler()) ;
 				
