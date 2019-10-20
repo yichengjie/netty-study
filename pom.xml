@@ -26,7 +26,8 @@
 		<module>seria-protobuf-client</module>
 		<module>seria-protobuf-server</module>
 		<module>netty-api-practice</module>
-	</modules>
+        <module>webscoket-study</module>
+    </modules>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

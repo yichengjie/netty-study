@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery-3.4.1.js"></script>
+</head>
+<body>
+
+<form onSubmit="return false;">
+    <input type = "text" id = "inputMessage" value = ""/>
+    <br/><br/>
+    <button type = "button" id="sendMsgBtn">发送WebSocket请求消息</button>
+    <hr color="red"/>
+    <h2>客户端接收到服务端返回的应答消息</h2>
+    <textarea id = "responseContent" style = "width:1024px; height:300px"></textarea>
+</form>
+<script type="text/javascript">
+    $(function () {
+        //初始化websocket
+        init() ;
+        //绑定事件处理函数
+        $("#sendMsgBtn").click(function () {
+            var message = $("#inputMessage").val() ;
+            sendMessage(message) ;
+        }) ;
+    }) ;
+    var socket ;
+    function init() {
+        if(!window.WebSocket){
+            window.WebSocket = window.MozWebSocket ;
+        }
+        if(window.WebSocket){
+            socket = new WebSocket("ws://localhost:8080/websocket") ;
+            socket.onmessage = function (ev) {
+                var value = $("#responseContent").val() + ev.data+"\r\n" ;
+                $("#responseContent").val(value) ;
+            }
+            socket.onopen = function () {
+                $("#responseContent").val("你当前的浏览器支持WebSocket,请进行后续操作\r\n") ;
+            }
+            socket.onclose = function () {
+                $("#responseContent").val("WebSocket连接已经关闭\r\n") ;
+            }
+        }else{
+            alert("您的浏览器不支持WebSocket") ;
+        }
+    }
+
+    function sendMessage(message) {
+        if(!window.WebSocket){
+            return ;
+        }
+        if(socket.readyState === WebSocket.OPEN){
+            socket.send(message) ;
+        }else {
+            alert("WebSocket连接没有建立成功！！") ;
+        }
+    }
+</script>
+</body>
+</html>
